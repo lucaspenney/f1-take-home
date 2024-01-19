@@ -58,14 +58,14 @@ userRouter.post("/:userId/join/:communityId", async (req, res) => {
 		return res.status(404).send({ message: "Community not found" });
 	}
 
-	if (user.currentCommunity) {
-		return res.status(400).send({ message: "User already in a community" });
+	if (user.currentCommunity && user.currentCommunity._id.toString() === community._id.toString()) {
+		return res.status(400).send({ message: "User already in this community" });
 	}
 
 	try {
-		user.currentCommunity =  community;
+		user.currentCommunity = community;
 		await user.save();
-	}catch(e) {
+	} catch(e) {
 		return res.status(500).send({ message: "Error saving user" });
 	}
 
@@ -92,7 +92,7 @@ userRouter.delete("/:userId/leave/:communityId", async (req, res) => {
 	}
 
 	// Check if user is in the community they are attempting to leave
-	if (!user.currentCommunity || user.currentCommunity.id !== community.id) {
+	if (!user.currentCommunity || user.currentCommunity._id.toString() !== community._id.toString()) {
 		return res.status(400).send({ message: "User not in this community" });
 	}
 

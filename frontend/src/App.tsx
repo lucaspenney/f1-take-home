@@ -1,8 +1,12 @@
 import './App.css'
+import { useState } from 'react';
 import UserCommunityRelationshipManager from './components/UserCommunityRelationshipManager'
+import CommunityLeaderboard from './components/CommunityLeaderboard'
 import { Toaster } from 'react-hot-toast';
 
 function App() {
+
+  const [lastUpdate, setLastUpdate] = useState<number>(0);
 
   return (
     <>
@@ -13,7 +17,8 @@ function App() {
         </a>
       </div>
       <div>
-        <UserCommunityRelationshipManager />
+        <UserCommunityRelationshipManager setLastUpdate={setLastUpdate} />
+        <CommunityLeaderboard lastUpdate={lastUpdate}/>
       </div>
     </>
   )

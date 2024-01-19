@@ -10,7 +10,11 @@ interface MutationData {
     communityId: string;
 };
 
-const UserCommunityRelationshipManager = () => {
+type UserCommunityRelationshipManagerProps = {
+    setLastUpdate: (lastUpdate: number) => void;
+};
+
+const UserCommunityRelationshipManager = (props: UserCommunityRelationshipManagerProps) => {
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
     const [selectedCommunity, setSelectedCommunity] = useState<string | null>(null);
 
@@ -28,18 +32,28 @@ const UserCommunityRelationshipManager = () => {
         mutationFn: (data: MutationData) => axios.post(`http://localhost:8080/user/${data.userId}/join/${data.communityId}`),
         onSuccess: () => {
             toast.success('Successfully joined the community');
+            props.setLastUpdate(Date.now());
         },
         onError: (error: any) => {
-            toast.error(`Error: ${error.message}`);
+            if (error.response?.data?.message) {
+                toast.error(`Error: ${error.response.data.message}`);
+            } else {
+                toast.error(`Error: ${error.message}`);
+            }
         }
     });
     const leaveMutation = useMutation({
         mutationFn: (data: MutationData) => axios.delete(`http://localhost:8080/user/${data.userId}/leave/${data.communityId}`),
         onSuccess: () => {
             toast.success('Successfully left the community');
+            props.setLastUpdate(Date.now());
         },
         onError: (error: any) => {
-            toast.error(`Error: ${error.message}`);
+            if (error.response?.data?.message) {
+                toast.error(`Error: ${error.response.data.message}`);
+            } else {
+                toast.error(`Error: ${error.message}`);
+            }
         }
     });
 

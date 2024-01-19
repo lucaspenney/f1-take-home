@@ -2,7 +2,7 @@ import { prop, getModelForClass, Ref } from '@typegoose/typegoose';
 import { Community } from './Community';
 
 
-class User {
+export class User {
 	@prop({ required: true })
 	public email?: string;
 
@@ -15,7 +15,7 @@ class User {
 	@prop({ required: true, select: false, default: [] })
 	public experiencePoints?: {points: number, timestamp: Date}[];
 
-	@prop({ ref: () => Community, default: null })
+	@prop({ ref: () => 'Community', default: null })
 	public currentCommunity?: Ref<Community>|null;
 }
 
